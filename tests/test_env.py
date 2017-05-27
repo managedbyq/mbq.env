@@ -1,6 +1,8 @@
-from unittest import mock, TestCase
+from unittest import TestCase
 
 from mbq import env
+
+from tests.compat import mock
 
 
 # keys generated JUST for tests
