@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from mbq import env
+import six
 
 from tests.compat import mock
 
@@ -89,7 +90,7 @@ class EnvTests(TestCase):
         self.env = env.Env()
 
     def test_missing(self):
-        with self.assertRaisesRegex(env.EnvException, 'Missing key "MISSING"'):
+        with six.assertRaisesRegex(self, env.EnvException, 'Missing key "MISSING"'):
             self.env.get('MISSING')
 
     def test_missing_with_default(self):
@@ -121,7 +122,7 @@ class EnvTests(TestCase):
     @environ(ONE='1', BAD='BACON')
     def test_get_int(self):
         self.assertEqual(self.env.get_int('ONE'), 1)
-        with self.assertRaisesRegex(env.EnvException, 'invalid literal'):
+        with six.assertRaisesRegex(self, env.EnvException, 'invalid literal'):
             self.env.get_int('BAD')
 
     @environ(TRUE='1', FALSE='0', BAD='BACON')

@@ -30,5 +30,8 @@ setuptools.setup(
     ],
     keywords='env environment',
     packages=setuptools.find_packages(),
+    install_requires=[
+        'six',
+    ],
     zip_safe=True,
 )
