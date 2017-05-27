@@ -30,7 +30,7 @@ class Env:
             if not required:
                 return None
 
-            raise EnvException(f'Missing key "{key}"')
+            raise EnvException('Missing key "{}"'.format(key))
 
         if coerce is not NOT_PROVIDED:
             val = coerce(val)
@@ -42,7 +42,7 @@ class Env:
             return self.get(key, default=default, required=required,
                             coerce=int)
         except ValueError as e:
-            raise EnvException(f'Could not get int: {e}')
+            raise EnvException('Could not get int: {}'.format(e))
 
     def get_bool(self, key, default=NOT_PROVIDED, required=True):
         return self.get(key, default=default, required=required) == '1'
@@ -62,8 +62,8 @@ class Env:
                         coerce=splitter)
 
     def get_key(self, guard_type, key, required=True):
-        BEGIN_GUARD = f'-----BEGIN {guard_type}-----'
-        END_GUARD = f'-----END {guard_type}-----'
+        BEGIN_GUARD = '-----BEGIN {}-----'.format(guard_type)
+        END_GUARD = '-----END {}-----'.format(guard_type)
         LINE_LENGTH = 64
 
         val = self.get(key, required=required)
