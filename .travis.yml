@@ -1,0 +1,38 @@
+sudo: false
+language: python
+python:
+  - '2.7'
+  - '3.5'
+  - '3.6'
+  - 3.7-dev
+  - pypy
+  - pypy3
+cache: pip
+
+matrix:
+  allow_failures:
+    - python: 3.7-dev
+    - python: pypy3
+
+install:
+  - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then travis_retry pip install mock; fi
+  - travis_retry pip install -U pip setuptools wheel twine flake8
+  - pip install .
+
+script:
+  - flake8
+  - python -m unittest discover tests
+
+notifications:
+  email: false
+
+deploy:
+  provider: pypi
+  user: managedbyq
+  password:
+    secure:
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    python: '3.6'
+    repo: managedbyq/mbq.env
