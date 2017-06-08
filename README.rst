@@ -27,17 +27,36 @@ Guaranteed fresh.
 Getting started
 ---------------
 
+.. code-block:: bash
+
+    $ env
+    ...
+    MY_VAR=bacon
+    MY_INT_VAR=123
+    MY_BOOL_VAR=1
+    MY_CSV_VAR=a,b,c
+    MY_TOKEN_VAR=a b c
+    MY_KEY_VAR=-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
+    ...
+
 .. code-block:: python
 
-    from mbq import env
+    In [1]: from mbq import env
 
-    env.get('MY_KEY', default='BACON')
+    In [2]: env.get('MY_VAR', default='BACON')
+    Out[2]: 'bacon'
 
-    # show the rest
+    In [3]: env.get_int('MY_INT_VAR', default=12)
+    Out[3]: 123
 
-API Reference
--------------
+    In [4]: env.get_bool('MY_BOOL_VAR', default=False)
+    Out[4]: True
 
+    In [5]: env.get_csv('MY_CSV_VAR', default=['abc', '123'])
+    Out[5]: ['a', 'b', 'c']
 
-Contributing
-------------
+    In [6]: env.get_tokens('MY_TOKEN_VAR', default=['abc', '123'])
+    Out[6]: ['a', 'b', 'c']
+
+    In [7]: env.get_key('CERTIFICATE', 'MY_KEY_VAR')
+    Out[7]: '-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----'
