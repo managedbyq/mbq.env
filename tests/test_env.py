@@ -130,6 +130,8 @@ class EnvTests(TestCase):
         self.assertTrue(self.env.get_bool('TRUE'))
         self.assertFalse(self.env.get_bool('FALSE'))
         self.assertFalse(self.env.get_bool('BAD'))
+        self.assertTrue(self.env.get_bool('MISSING', default=True))
+        self.assertFalse(self.env.get_bool('MISSING', default=False))
 
     @environ(ONE='a', TWO='a,,b,')
     def test_get_csv(self):

@@ -45,7 +45,10 @@ class Env:
             raise EnvException('Could not get int: {}'.format(e))
 
     def get_bool(self, key, default=NOT_PROVIDED, required=True):
-        return self.get(key, default=default, required=required) == '1'
+        def is_bool(val):
+            return val == '1'
+
+        return self.get(key, default=default, required=required, coerce=is_bool)
 
     def get_csv(self, key, default=NOT_PROVIDED, required=True):
         def splitter(val):
