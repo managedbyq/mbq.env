@@ -1,22 +1,20 @@
 sudo: false
 language: python
 python:
-  - '2.7'
   - '3.5'
   - '3.6'
-  - 3.7-dev
-  - pypy
   - pypy3
-cache: pip
 
 matrix:
-  allow_failures:
-    - python: 3.7-dev
-    - python: pypy3
+  include:
+    - python: 3.7
+      dist: xenial
+      sudo: true
+
+cache: pip
 
 install:
-  - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then travis_retry pip install mock; fi
-  - travis_retry pip install --upgrade pip setuptools wheel twine flake8
+  - travis_retry pip install --upgrade pip setuptools wheel twine flake8 flake8-isort isort
   - pip install .
 
 script:

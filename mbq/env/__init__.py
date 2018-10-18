@@ -8,19 +8,7 @@ class EnvException(Exception):
 
 
 class Env:
-    def __init__(self, prefix=None):
-        if prefix is None:
-            self.prefix = ''
-        else:
-            self.prefix = prefix + '_'
-
-    def get(self, key, default=NOT_PROVIDED, required=True,
-            coerce=NOT_PROVIDED):
-        # I know, I know, coerce is a built-in function but it was removed
-        # in Python 3 and I bet that if I didn't write this comment,
-        # the shadowing would have gone unnoticed. Deal with it.
-        key = self.prefix + key
-
+    def get(self, key, default=NOT_PROVIDED, required=True, coerce=NOT_PROVIDED):
         try:
             val = os.environ[key].strip()
         except KeyError:

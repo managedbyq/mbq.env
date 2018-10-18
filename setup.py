@@ -1,5 +1,7 @@
 import codecs
+
 import setuptools
+
 
 __version__ = '0.1.0'
 
@@ -21,8 +23,6 @@ setuptools.setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
@@ -30,8 +30,5 @@ setuptools.setup(
     ],
     keywords='env environment',
     packages=setuptools.find_packages(),
-    install_requires=[
-        'six',
-    ],
     zip_safe=True,
 )

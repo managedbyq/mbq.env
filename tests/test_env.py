@@ -1,9 +1,6 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from mbq import env
-import six
-
-from tests.compat import mock
 
 
 # keys generated JUST for tests
@@ -90,7 +87,7 @@ class EnvTests(TestCase):
         self.env = env.Env()
 
     def test_missing(self):
-        with six.assertRaisesRegex(self, env.EnvException, 'Missing key "MISSING"'):
+        with self.assertRaisesRegex(env.EnvException, 'Missing key "MISSING"'):
             self.env.get('MISSING')
 
     def test_missing_with_default(self):
@@ -122,7 +119,7 @@ class EnvTests(TestCase):
     @environ(ONE='1', BAD='BACON')
     def test_get_int(self):
         self.assertEqual(self.env.get_int('ONE'), 1)
-        with six.assertRaisesRegex(self, env.EnvException, 'invalid literal'):
+        with self.assertRaisesRegex(env.EnvException, 'invalid literal'):
             self.env.get_int('BAD')
 
     @environ(TRUE='1', FALSE='0', BAD='BACON')
@@ -142,10 +139,6 @@ class EnvTests(TestCase):
     def test_get_tokens(self):
         self.assertEqual(self.env.get_tokens('ONE'), ['a'])
         self.assertEqual(self.env.get_tokens('THREE'), ['a', 'b', 'c'])
-
-    @environ(TEST_KEY='value')
-    def test_prefix(self):
-        self.assertEqual(env.Env(prefix='TEST').get('KEY'), 'value')
 
     @environ(RSA=RSA_1024.replace('\n', ''))
     def test_get_rsa(self):
