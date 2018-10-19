@@ -1,7 +1,6 @@
 sudo: false
 language: python
 python:
-  - '3.5'
   - '3.6'
   - pypy3
 
@@ -14,7 +13,7 @@ matrix:
 cache: pip
 
 install:
-  - travis_retry pip install --upgrade pip setuptools wheel twine flake8 flake8-isort isort
+  - travis_retry pip install --upgrade --requirement requirements-dev.txt
   - pip install .
 
 script:
