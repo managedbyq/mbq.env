@@ -1,4 +1,6 @@
 import os
+from enum import Enum
+
 
 NOT_PROVIDED = object()
 
@@ -7,30 +9,67 @@ class EnvException(Exception):
     pass
 
 
+class Environment(Enum):
+    """
+    A simple Enum to provide consistency in how we detect and
+    represent the environment in which a service is running.
+    """
+
+    PRODUCTION = ('prd', 'Production')
+    DEVELOPMENT = ('dev', 'Development')
+    LOCAL = ('lcl', 'Local')
+
+    def __init__(self, short_name, long_name):
+        self.short_name = short_name
+        self.long_name = long_name
+        self._searchable = {short_name.lower(), long_name.lower()}
+
+    @property
+    def is_deployed(self):
+        return self in {self.PRODUCTION, self.DEVELOPMENT}
+
+    @classmethod
+    def _missing_(cls, value):
+        """
+        Extends the default value lookup behavior
+        Environment(('prd', 'Production')) to accept either string (case-
+        insensitive).
+
+        >>> assert Environment.PRODUCTION is Environment('prd') is Environment('PRODUCTION')
+        """
+        for member in list(cls):
+            if value.lower() in member._searchable:
+                return member
+        return super()._missing_(value)
+
+
 class Env:
     def get(self, key, default=NOT_PROVIDED, required=True, coerce=NOT_PROVIDED):
         try:
             val = os.environ[key].strip()
-        except KeyError:
+        except KeyError as e:
             if default is not NOT_PROVIDED:
                 return default
 
             if not required:
                 return None
 
-            raise EnvException('Missing key "{}"'.format(key))
+            raise EnvException('Missing key "{}"'.format(key)) from e
 
         if coerce is not NOT_PROVIDED:
             val = coerce(val)
 
         return val
 
+    def get_environment(self, key, default=NOT_PROVIDED, required=True):
+        return self.get(key, default=default, required=required, coerce=Environment)
+
     def get_int(self, key, default=NOT_PROVIDED, required=True):
         try:
             return self.get(key, default=default, required=required,
                             coerce=int)
         except ValueError as e:
-            raise EnvException('Could not get int: {}'.format(e))
+            raise EnvException('Could not get int: {}'.format(e)) from e
 
     def get_bool(self, key, default=NOT_PROVIDED, required=True):
         def is_bool(val):
@@ -86,6 +125,7 @@ _default = Env()  # no prefix for module-based use
 get = _default.get
 get_bool = _default.get_bool
 get_csv = _default.get_csv
+get_environment = _default.get_environment
 get_int = _default.get_int
 get_key = _default.get_key
 get_tokens = _default.get_tokens

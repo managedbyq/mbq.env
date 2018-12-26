@@ -116,6 +116,13 @@ class EnvTests(TestCase):
         args, kwargs = passthru.call_args
         self.assertEqual(args[0], 'value')
 
+    @environ(GOOD='prd', BAD='BACON')
+    def test_get_environment(self):
+        self.assertIs(self.env.get_environment('GOOD'), env.Environment.PRODUCTION)
+
+        with self.assertRaises(ValueError):
+            self.env.get_environment('BAD')
+
     @environ(ONE='1', BAD='BACON')
     def test_get_int(self):
         self.assertEqual(self.env.get_int('ONE'), 1)
@@ -147,3 +154,27 @@ class EnvTests(TestCase):
     @environ(CERT=CERT_4096.replace('\n', ''))
     def test_get_cert(self):
         self.assertEqual(self.env.get_key('CERTIFICATE', 'CERT'), CERT_4096)
+
+
+class EnvironmentEnumTest(TestCase):
+    def test_value_lookup(self):
+        self.assertIs(env.Environment.PRODUCTION, env.Environment('prd'))
+        self.assertIs(env.Environment.PRODUCTION, env.Environment('PRD'))
+        self.assertIs(env.Environment.PRODUCTION, env.Environment('production'))
+        self.assertIs(env.Environment.PRODUCTION, env.Environment('PrOdUcTiOn'))
+
+    def test_is_deployed(self):
+        self.assertTrue(env.Environment.PRODUCTION.is_deployed)
+        self.assertTrue(env.Environment.DEVELOPMENT.is_deployed)
+        self.assertFalse(env.Environment.LOCAL.is_deployed)
+
+        # no different than the above but testing explicitly to ensure we
+        # maintain the api
+        current = env.Environment('prd')
+        self.assertTrue(current.is_deployed)
+
+    def test_names(self):
+        # trivial tests to prevent api regressions
+        for member in list(env.Environment):
+            self.assertIsInstance(member.short_name, str)
+            self.assertIsInstance(member.long_name, str)
