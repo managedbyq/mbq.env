@@ -3,5 +3,5 @@ flake8-isort==2.6.0
 isort==4.3.4
 pip==18.1
 setuptools==40.6.3
-twine
+twine==1.12.1
 wheel
