@@ -129,13 +129,20 @@ class EnvTests(TestCase):
         with self.assertRaisesRegex(env.EnvException, 'invalid literal'):
             self.env.get_int('BAD')
 
-    @environ(TRUE='1', FALSE='0', BAD='BACON')
+    @environ(TRUE='1', FALSE='0', BAD='BACON', TRUE_STRING='true', FALSE_STRING='false')
     def test_get_bool(self):
         self.assertTrue(self.env.get_bool('TRUE'))
         self.assertFalse(self.env.get_bool('FALSE'))
-        self.assertFalse(self.env.get_bool('BAD'))
+        with self.assertRaises(ValueError):
+            self.env.get_bool('BAD')
+        with self.assertRaises(ValueError):
+            self.env.get_bool('BAD', default=True)
         self.assertTrue(self.env.get_bool('MISSING', default=True))
         self.assertFalse(self.env.get_bool('MISSING', default=False))
+        with self.assertRaises(ValueError):
+            self.env.get_bool('TRUE_STRING')
+        with self.assertRaises(ValueError):
+            self.env.get_bool('FALSE_STRING')
 
     @environ(ONE='a', TWO='a,,b,')
     def test_get_csv(self):

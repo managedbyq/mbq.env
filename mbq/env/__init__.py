@@ -73,7 +73,12 @@ class Env:
 
     def get_bool(self, key, default=NOT_PROVIDED, required=True):
         def is_bool(val):
-            return val == '1'
+            if val == '1':
+                return True
+            elif val == '0':
+                return False
+            else:
+                raise ValueError(f"{key} must be '1' or '0' (got '{val}')")
 
         return self.get(key, default=default, required=required, coerce=is_bool)
 
