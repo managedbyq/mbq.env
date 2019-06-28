@@ -1,6 +1,7 @@
 flake8
 flake8-isort
 isort
+mypy-mypyc
 pip
 setuptools
 twine

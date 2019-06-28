@@ -13,7 +13,8 @@ install:
   - pip install .
 
 script:
-  - flake8
+  - flake8 mbq
+  - mypy mbq
   - python -Wall -m unittest discover tests
 
 notifications:
