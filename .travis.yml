@@ -14,6 +14,7 @@ install:
 
 script:
   - flake8
+  - mypy mbq
   - python -Wall -m unittest discover tests
 
 notifications:

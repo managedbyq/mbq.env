@@ -36,6 +36,7 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries',
     ],
     keywords='env environment',
+    package_data={"mbq.env": ["py.typed"]},
     packages=setuptools.find_packages(),
-    zip_safe=True,
+    zip_safe=False,
 )
