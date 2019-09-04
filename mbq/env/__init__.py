@@ -18,7 +18,7 @@ class Environment(Enum):
     PRODUCTION = ('prd', 'Production')
     DEVELOPMENT = ('dev', 'Development')
     LOCAL = ('lcl', 'Local')
-    TEST = ('lcl', 'Test')
+    TEST = ('test', 'Test')
 
     def __init__(self, short_name, long_name):
         self.short_name = short_name
